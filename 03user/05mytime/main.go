@@ -17,3 +17,6 @@ func main() {
 	fmt.Println("createdDate")
 	fmt.Println(createdDate.Format("01-02-2006 Monday"))
 }
+
+// new () MEMORY MANAGEMENT = allocate memo but no init = zeroed storage
+// make() allocate memo and init  = non-zeroed storage
