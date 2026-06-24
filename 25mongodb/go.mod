@@ -1,4 +1,4 @@
-module hello
+module github.com/sss/mongoapi
 
 go 1.26.4
 

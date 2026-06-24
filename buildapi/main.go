@@ -32,6 +32,21 @@ func (c *Course) IsEmpty() bool {
 	return c.CourseId == "" && c.CourseName == ""
 }
 func main() {
+	fmt.Println("API - LearnCodeOnline.in")
+	r := mux.NewRouter()
+
+	// seeding
+	courses = append(courses, Course{CourseId: "2",CourseName: 
+    "ReactJS", CoursePrice: 299, Author: &Author{Fullname: "sss", Website: "lco.dev"}})
+
+	// listen to a part
+	r.HandleFunc("/", serveHome).Methods("GET")
+	r.HandleFunc("/courses", getAllCourses).Methods("GET")
+	r.HandleFunc("/courses", createOneCourse).Methods("POST")
+	r.HandleFunc("/courses/{id}", updateOneCourse).Methods("PUT")
+
+
+	log.Fatal(http.ListenAndServe(":4000", r))
 
 }
 
@@ -80,8 +95,7 @@ func createOneCourse(w http.ResponseWriter, r *http.Request) {
 	}
 	// what about - {}
 
-	var course Course
-	_ = json.NewDecoder(r.Body).Decode(&course)
+	var course Course = json.NewDecoder(r.Body).Decode(&course)
 	if course.IsEmpty() {
 		json.NewEncoder(w).Encode("No data inside JSON")
 		return
