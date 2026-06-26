@@ -2,10 +2,13 @@ package controller
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	model "hello/MONGODB/models"
 	"log"
+	"net/http"
 
+	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -97,7 +100,7 @@ func deleteAllMovie() int64 {
 func getAllMovies() {
 	collection.Find(context.Background(), bson.D{{}})
 	if err != nil {
-		log.Fatak(err)
+		log.Fatal(err)
 	}
 	var movies []primtive.M
 
@@ -111,4 +114,30 @@ func getAllMovies() {
 	}
 	defer cur.Close(context.Background())
 	return movies
+}
+
+//  Actual controller  - file
+
+func GetMyAllMovies(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/x-www-form-urlencode")
+	allMovies := getAllMovies()
+	json.NewEncoder(w).Encode(allMovies)
+
+}
+func createMovie(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-Type", "application/x-www-form-urlencode")
+	w.Header().Set("Allow-Control-Allow-Methods", "POST")
+	var movie model.Netflix
+	_ = json.NewDecoder(r.Body).Decode(&movie)
+	inserOneMovie(movie)
+	json.NewEncoder(w).Encode(movie)
+
+}
+func markAsWatched(q http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-Type", "application/x-www-form-urlencode")
+	w.Header().Set("Allow-Control-Allow-Methods", "POST")
+	params := mux.Vars(r)
+	updateOneMovie(params["id"])
+	json.NewEncoder(w).Encode(params["id"])
+
 }
