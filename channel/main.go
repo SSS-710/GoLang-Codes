@@ -1,0 +1,11 @@
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Channels in Golang")
+
+	myCh := make(chan int)
+
+	fmt.Println(myCh)
+}
